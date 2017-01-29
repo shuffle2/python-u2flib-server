@@ -134,6 +134,7 @@ class RawAuthenticationResponse(object):
         self.data = data
 
         self.user_presence = data[0:1]
+        self.user_presence_int = struct.unpack('>B', self.user_presence)[0]
         self.counter = data[1:5]
         self.counter_int = struct.unpack('>I', self.counter)[0]
         self.signature = data[5:]
@@ -246,4 +247,4 @@ def verify_authenticate(device, request, response, valid_facets=None):
     )
     raw_response.verify_signature(websafe_decode(device.publicKey))
 
-    return raw_response.counter_int, raw_response.user_presence
+    return raw_response.counter_int, raw_response.user_presence_int
